@@ -743,6 +743,7 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
   margin-bottom: 28px;
 }
 .auth-tab {
+  z-index: 15;
   flex: 1;
   padding: 9px;
   border: none;
@@ -1738,3 +1739,4 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
   .quick-actions { grid-template-columns: 1fr 1fr; }
   .modal { padding: 28px 20px; }
 }
+
