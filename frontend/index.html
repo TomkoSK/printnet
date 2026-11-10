@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PrintNet – Inteligentné tlačové riešenia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a class="nav-brand" href="#" onclick="showPage('dashboard'); return false;">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+        PrintNet
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a class="nav-link" href="#" onclick="showPage('dashboard'); return false;" data-page="dashboard">Prehľad</a>
+        <a class="nav-link" href="#" onclick="showPage('credits'); return false;" data-page="credits">Kúpiť kredity</a>
+        <a class="nav-link" href="#" onclick="showPage('upload'); return false;" data-page="upload">Tlačiť súbory</a>
+        <a class="nav-link" href="#" onclick="showPage('history'); return false;" data-page="history">História</a>
+      </div>
+      <div class="nav-actions">
+        <div class="credit-badge" id="navCreditBadge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span id="navCreditCount">0 kreditov</span>
+        </div>
+        <div class="user-menu" id="userMenu">
+          <div class="user-avatar" id="userAvatar">JD</div>
+          <span class="user-name" id="userNameDisplay">Ján Novák</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#" onclick="showPage('profile'); return false;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profil
+            </a>
+            <!-- <a href="#" onclick="showPage('settings'); return false;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+              Nastavenia
+            </a> -->
+            <div class="dropdown-divider"></div>
+            <a href="#" onclick="logout(); return false;" class="logout-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Odhlásiť sa
+            </a>
+          </div>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE: LOGIN ===== -->
+  <div class="page" id="page-login">
+    <div class="auth-wrapper">
+      <div class="auth-left">
+        <div class="auth-left-content">
+          <div class="auth-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            PrintNet
+          </div>
+          <h1>Tlačte jednoduchšie<br/>a rýchlejšie.</h1>
+          <p>Nahrajte svoje dokumenty, spravujte svoje tlačové kredity a odosielajte úlohy na akúkoľvek pripojenú tlačiareň – všetko na jednom mieste.</p>
+          <div class="auth-features">
+            <div class="auth-feature">
+              <div class="feature-icon-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span>Okamžité spracovanie súborov</span>
+            </div>
+            <div class="auth-feature">
+              <div class="feature-icon-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              </div>
+              <span>Flexibilné balíčky kreditov</span>
+            </div>
+            <div class="auth-feature">
+              <div class="feature-icon-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <span>Bezpečné a šifrované nahrávanie</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="auth-right">
+        <div class="auth-brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          PrintNet
+        </div>
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button class="auth-tab active" id="loginTab" onclick="switchAuthTab('login')">Prihlásiť sa</button>
+            <button class="auth-tab" id="registerTab" onclick="switchAuthTab('register')">Vytvoriť účet</button>
+          </div>
+
+          <!-- Login Form -->
+          <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label class="form-label" for="loginEmail">E-mailová adresa</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <input type="email" id="loginEmail" class="form-input" placeholder="vy@example.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="loginPassword">
+                Heslo
+                <a href="#" class="forgot-link" onclick="showForgotPassword(); return false;">Zabudnuté heslo?</a>
+              </label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="rememberMe" class="check-input" />
+              <label for="rememberMe" class="check-label">Zapamätať si ma na 30 dní</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              Prihlásiť sa
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+
+          <!-- Register Form -->
+          <form class="auth-form hidden" id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="regFirstName">Meno</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="regFirstName" class="form-input" placeholder="Ján" required />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="regLastName">Priezvisko</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="regLastName" class="form-input" placeholder="Novák" required />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regEmail">E-mailová adresa</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <input type="email" id="regEmail" class="form-input" placeholder="vy@example.com" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regPassword">Heslo</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" id="regPassword" class="form-input" placeholder="Min. 8 znakov" required />
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('regPassword', this)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="password-strength" id="passwordStrength">
+                <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                <span class="strength-label" id="strengthLabel">Zadajte heslo</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="regConfirmPassword">Potvrdiť heslo</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input type="password" id="regConfirmPassword" class="form-input" placeholder="Zopakujte heslo" required />
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" id="agreeTerms" class="check-input" required />
+              <label for="agreeTerms" class="check-label">Súhlasím s <a href="#" class="text-link">Podmienkami služby</a> a <a href="#" class="text-link">Zásadami ochrany osobných údajov</a></label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+              Vytvoriť účet
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: DASHBOARD ===== -->
+  <div class="page hidden" id="page-dashboard">
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title" id="dashGreeting">Dobré ráno, Ján!</h1>
+          <p class="page-subtitle">Tu je prehľad vášho účtu PrintNet.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('upload')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Nová tlačová úloha
+        </button>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="dashCredits">0</span>
+            <span class="stat-label">Dostupné kredity</span>
+          </div>
+          <a href="#" class="stat-action" onclick="showPage('credits'); return false;">Doplniť →</a>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="dashJobsTotal">0</span>
+            <span class="stat-label">Celkom tlačené</span>
+          </div>
+          <a href="#" class="stat-action" onclick="showPage('history'); return false;">Zobraziť →</a>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="dashPagesTotal">0</span>
+            <span class="stat-label">Vytlačené strany</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value" id="dashSpentTotal">€0.00</span>
+            <span class="stat-label">Utratené kredity</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions + Recent Jobs -->
+      <div class="dashboard-grid">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Rýchle akcie</h2>
+          </div>
+          <div class="quick-actions">
+            <button class="quick-action-btn" onclick="showPage('upload')">
+              <div class="qa-icon qa-blue">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <span>Nahrať a tlačiť</span>
+            </button>
+            <button class="quick-action-btn" onclick="showPage('credits')">
+              <div class="qa-icon qa-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <span>Kúpiť kredity</span>
+            </button>
+            <button class="quick-action-btn" onclick="showPage('history')">
+              <div class="qa-icon qa-orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              </div>
+              <span>História tlače</span>
+            </button>
+            <button class="quick-action-btn" onclick="showPage('profile')">
+              <div class="qa-icon qa-purple">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <span>Môj profil</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Najnovšie tlačové úlohy</h2>
+            <a href="#" class="card-link" onclick="showPage('history'); return false;">Zobraziť všetky</a>
+          </div>
+          <div class="recent-jobs" id="dashRecentJobs">
+            <div class="empty-state-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <p>Zatiaľ žiadne tlačové úlohy.<br/><a href="#" onclick="showPage('upload'); return false;">Začnite svoju prvú tlač →</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== PAGE: BUY CREDITS ===== -->
+  <div class="page hidden" id="page-credits">
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Kúpiť kredity</h1>
+          <p class="page-subtitle">Vyberte si balíček kreditov, ktorý vyhovuje vašim tlačovým potrebám.</p>
+        </div>
+        <div class="current-balance-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Aktuálny zostatok: <strong id="creditsPageBalance">0 kreditov</strong>
+        </div>
+      </div>
+
+      <!-- Credit Slider -->
+      <div class="card credit-slider-card">
+        <div class="slider-display">
+          <div class="slider-credits-display">
+            <span class="slider-credits-value" id="sliderCreditsValue">100</span>
+            <span class="slider-credits-label">Kreditov</span>
+          </div>
+          <div class="slider-price-display">
+            <span class="slider-price-value" id="sliderPriceValue">€9.00</span>
+            <span class="slider-ppc" id="sliderPPC">€0.090 za kredit</span>
+          </div>
+        </div>
+        <div class="slider-wrapper">
+          <input type="range" id="creditSlider" class="credit-slider" min="10" max="1000" step="10" value="100" oninput="updateSlider(this.value)" />
+          <div class="slider-labels">
+            <span>10 kreditov</span>
+            <span>1000 kreditov</span>
+          </div>
+        </div>
+        <div class="slider-info-row">
+          <div class="slider-info-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>~<span id="sliderBWPages">100</span> ČB strán</span>
+          </div>
+          <div class="slider-info-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>~<span id="sliderColorPages">50</span> farebných strán</span>
+          </div>
+          <div class="slider-info-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Kredity nikdy neexpirujú</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="payment-section" id="paymentSection">
+        <div class="card payment-card">
+          <div class="card-header">
+            <h2 class="card-title">Platobné údaje</h2>
+            <div class="selected-package-summary" id="selectedPackageSummary">
+              100 kreditov za €13.00
+            </div>
+          </div>
+          <form id="paymentForm" onsubmit="handlePayment(event)">
+            <div class="payment-methods">
+              <label class="payment-method active" id="pm-card">
+                <input type="radio" name="paymentMethod" value="card" checked onclick="switchPaymentMethod('card')" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Kreditná / Debetná karta
+              </label>
+              <label class="payment-method" id="pm-paypal">
+                <input type="radio" name="paymentMethod" value="paypal" onclick="switchPaymentMethod('paypal')" />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 11C7 11 6 17 12 17C18 17 18 11 18 11"/><path d="M5 7C5 7 4 13 10 13C16 13 16 7 16 7"/><path d="M12 17V21"/><path d="M10 13V17"/></svg>
+                Google Pay
+              </label>
+            </div>
+
+            <!-- Card Fields -->
+            <div id="cardFields">
+              <div class="form-group">
+                <label class="form-label" for="cardName">Meno držiteľa karty</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <input type="text" id="cardName" class="form-input" placeholder="Ján Novák" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cardNumber">Číslo karty</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)" />
+                  <div class="card-type-icon" id="cardTypeIcon"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="cardExpiry">Dátum exspirácie</label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <input type="text" id="cardExpiry" class="form-input" placeholder="MM / RR" maxlength="7" oninput="formatExpiry(this)" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="cardCVV">
+                    CVV
+                    <span class="tooltip-trigger" title="3-miestny kód na zadnej strane karty">?</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <input type="text" id="cardCVV" class="form-input" placeholder="•••" maxlength="4" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PayPal Fields -->
+            <div id="paypalFields" class="hidden">
+              <div class="paypal-info">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <p>Budete presmerovaní na Google Pay na dokončenie platby.</p>
+              </div>
+            </div>
+
+            <div class="secure-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Zabezpečené 256-bitovým SSL šifrovaním
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full btn-lg" id="payBtn" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Dokončiť nákup
+            </button>
+          </form>
+        </div>
+
+        <div class="payment-info-sidebar">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Súhrn objednávky</h3></div>
+            <div class="order-summary" id="orderSummary">
+              <div class="order-row"><span>Kredity</span><span id="summaryCredits">100 kreditov</span></div>
+              <div class="order-row"><span>Cena za kredit</span><span id="summaryPPC">—</span></div>
+              <div class="order-divider"></div>
+              <div class="order-row order-total"><span>Celkom</span><span id="summaryTotal">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: UPLOAD / PRINT ===== -->
+  <div class="page hidden" id="page-upload">
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Nová tlačová úloha</h1>
+          <p class="page-subtitle">Nahrajte svoje súbory a nakonfigurujte nastavenia tlače.</p>
+        </div>
+        <div class="current-balance-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Zostatok: <strong id="uploadPageBalance">0 kreditov</strong>
+        </div>
+      </div>
+
+      <div class="upload-layout">
+        <div class="upload-main">
+          <!-- Step 1: Upload Files -->
+          <div class="card upload-step" id="uploadStep1">
+            <div class="step-header">
+              <div class="step-number">1</div>
+              <div>
+                <h2 class="card-title">Nahrať súbory</h2>
+                <p class="step-desc">Podporované formáty: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG</p>
+              </div>
+            </div>
+            <div class="drop-zone" id="dropZone"
+              ondragover="handleDragOver(event)"
+              ondragleave="handleDragLeave(event)"
+              ondrop="handleDrop(event)"
+              onclick="document.getElementById('fileInput').click()">
+              <div class="drop-zone-content">
+                <div class="drop-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <p class="drop-title">Presuňte súbory sem</p>
+                <p class="drop-subtitle">alebo <span class="text-link">prehliadať v počítači</span></p>
+                <p class="drop-limit">Maximálna veľkosť súboru: 50 MB na súbor</p>
+              </div>
+              <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png" onchange="handleFileSelect(event)" style="display:none" />
+            </div>
+            <div class="file-list" id="fileList"></div>
+          </div>
+
+          <!-- Step 2: Print Settings -->
+          <div class="card upload-step" id="uploadStep2">
+            <div class="step-header">
+              <div class="step-number">2</div>
+              <div>
+                <h2 class="card-title">Nastavenia tlače</h2>
+                <p class="step-desc">Nakonfigurujte, ako majú byť dokumenty vytlačené.</p>
+              </div>
+            </div>
+            <div class="settings-grid">
+              <div class="form-group">
+                <label class="form-label">Farebný režim</label>
+                <div class="option-group" id="colorModeGroup">
+                  <button type="button" class="option-btn active" data-value="bw" onclick="selectOption('colorModeGroup', this); updateCostEstimate()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20z"/></svg>
+                    Čiernobiely
+                    <span class="option-cost">1 kredit/strana</span>
+                  </button>
+                  <button type="button" class="option-btn" data-value="color" onclick="selectOption('colorModeGroup', this); updateCostEstimate()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20z" fill="#e74c3c"/><path d="M12 2a10 10 0 0 0 0 20z" fill="#3498db"/></svg>
+                    Farebný
+                    <span class="option-cost">3 kredity/strana</span>
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Veľkosť papiera</label>
+                <div class="select-wrapper">
+                  <select class="form-select" id="paperSize" onchange="updateCostEstimate()">
+                    <option value="a4">A4 (210 × 297 mm)</option>
+                    <option value="a3">A3 (297 × 420 mm)</option>
+                    <option value="letter">Letter (8.5 × 11 palcov)</option>
+                    <option value="legal">Legal (8.5 × 14 palcov)</option>
+                  </select>
+                  <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Orientácia</label>
+                <div class="option-group" id="orientationGroup">
+                  <button type="button" class="option-btn active" data-value="portrait" onclick="selectOption('orientationGroup', this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+                    Na výšku
+                  </button>
+                  <button type="button" class="option-btn" data-value="landscape" onclick="selectOption('orientationGroup', this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/></svg>
+                    Na šírku
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Počet kópií</label>
+                <div class="counter-input">
+                  <button type="button" class="counter-btn" onclick="changeCopies(-1)">−</button>
+                  <input type="number" id="copiesInput" class="counter-value" value="1" min="1" max="99" onchange="updateCostEstimate()" />
+                  <button type="button" class="counter-btn" onclick="changeCopies(1)">+</button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="printNotes">Špeciálne inštrukcie (voliteľné)</label>
+              <textarea id="printNotes" class="form-textarea" placeholder="Akékoľvek špeciálne inštrukcie pre operátora tlače..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar: Cost Estimate & Submit -->
+        <div class="upload-sidebar">
+          <div class="card cost-card sticky-card">
+            <div class="card-header">
+              <h3 class="card-title">Odhad nákladov</h3>
+            </div>
+            <div class="cost-breakdown" id="costBreakdown">
+              <div class="cost-row"><span>Nahrané súbory</span><span id="costFiles">0</span></div>
+              <div class="cost-row"><span>Odhad strán</span><span id="costPages">0</span></div>
+              <div class="cost-row"><span>Kópie</span><span id="costCopies">1</span></div>
+              <div class="cost-row"><span>Farebný režim</span><span id="costColor">ČB (1 kr/str)</span></div>
+              <div class="cost-divider"></div>
+              <div class="cost-row cost-total"><span>Odhad nákladov</span><span id="costTotal">0 kreditov</span></div>
+              <div class="cost-row cost-after"><span>Zostatok potom</span><span id="costAfter">0 kreditov</span></div>
+            </div>
+            <div class="cost-warning hidden" id="costWarning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Nedostatok kreditov. <a href="#" onclick="showPage('credits'); return false;">Kúpiť viac →</a>
+            </div>
+            <button class="btn btn-primary btn-full btn-lg" id="submitPrintBtn" onclick="submitPrintJob()" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Odoslať na tlačiareň
+            </button>
+            <p class="cost-note">Kredity budú odpočítané po potvrdení úlohy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: HISTORY ===== -->
+  <div class="page hidden" id="page-history">
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">História tlače</h1>
+          <p class="page-subtitle">Všetky vaše minulé a aktuálne tlačové úlohy.</p>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('upload')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Nová tlačová úloha
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="table-toolbar">
+          <div class="search-wrapper">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" placeholder="Hľadať úlohy..." id="historySearch" oninput="filterHistory()" />
+          </div>
+          <div class="filter-group">
+            <div class="select-wrapper select-sm">
+              <select class="form-select" id="historyFilter" onchange="filterHistory()">
+                <option value="all">Všetky stavy</option>
+                <option value="completed">Dokončené</option>
+                <option value="processing">Spracúva sa</option>
+                <option value="queued">V poradí</option>
+                <option value="failed">Zlyhané</option>
+              </select>
+              <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="historyTable">
+            <thead>
+              <tr>
+                <th>ID úlohy</th>
+                <th>Názov súboru</th>
+                <th>Dátum</th>
+                <th>Strany</th>
+                <th>Farba</th>
+                <th>Použité kredity</th>
+                <th>Stav</th>
+                <th>Akcie</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <tr>
+                <td colspan="8" class="empty-table">
+                  <div class="empty-state-sm">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    <p>Zatiaľ žiadne tlačové úlohy. <a href="#" onclick="showPage('upload'); return false;">Začnite tlačiť →</a></p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: PROFILE ===== -->
+  <div class="page hidden" id="page-profile">
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Môj profil</h1>
+          <p class="page-subtitle">Spravujte informácie o svojom účte.</p>
+        </div>
+      </div>
+      <div class="profile-layout">
+        <div class="card profile-card">
+          <div class="profile-avatar-section">
+            <div class="profile-avatar" id="profileAvatar">JN</div>
+            <div class="profile-avatar-info">
+              <h3 id="profileName">Ján Novák</h3>
+              <p id="profileEmail">jan.novak@example.com</p>
+              <span class="account-badge">Základný účet</span>
+            </div>
+          </div>
+          <form class="profile-form" onsubmit="saveProfile(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="profileFirstName">Meno</label>
+                <div class="input-wrapper">
+                  <input type="text" id="profileFirstName" class="form-input" value="Ján" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="profileLastName">Priezvisko</label>
+                <div class="input-wrapper">
+                  <input type="text" id="profileLastName" class="form-input" value="Novák" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="profileEmailInput">E-mailová adresa</label>
+              <div class="input-wrapper">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <input type="email" id="profileEmailInput" class="form-input" value="jan.novak@example.com" />
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Uložiť zmeny</button>
+              <button type="button" class="btn btn-ghost">Zrušiť</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="profile-sidebar">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title">Zmeniť heslo</h3></div>
+            <form onsubmit="changePassword(event)">
+              <div class="form-group">
+                <label class="form-label" for="currentPassword">Aktuálne heslo</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" id="currentPassword" class="form-input" placeholder="••••••••" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="newPassword">Nové heslo</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" id="newPassword" class="form-input" placeholder="Min. 8 znakov" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="confirmNewPassword">Potvrdiť nové heslo</label>
+                <div class="input-wrapper">
+                  <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <input type="password" id="confirmNewPassword" class="form-input" placeholder="Zopakujte nové heslo" />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-outline btn-full">Aktualizovať heslo</button>
+            </form>
+          </div>
+          <div class="card danger-zone">
+            <div class="card-header"><h3 class="card-title danger-title">Nebezpečná zóna</h3></div>
+            <p class="danger-desc">Po vymazaní účtu sa nie je možné vrátiť späť. Buďte si istí.</p>
+            <button class="btn btn-danger btn-full" onclick="confirmDeleteAccount()">Vymazať účet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: SUCCESS ===== -->
+  <div class="modal-overlay hidden" id="successModal">
+    <div class="modal">
+      <div class="modal-icon modal-icon-success">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="modal-title" id="successTitle">Úspech!</h2>
+      <p class="modal-message" id="successMessage">Vaša akcia bola úspešne dokončená.</p>
+      <button class="btn btn-primary btn-full" id="successBtn" onclick="closeModal('successModal')">Pokračovať</button>
+    </div>
+  </div>
+
+  <!-- ===== MODAL: CONFIRM ===== -->
+  <div class="modal-overlay hidden" id="confirmModal">
+    <div class="modal">
+      <div class="modal-icon modal-icon-warning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h2 class="modal-title" id="confirmTitle">Ste si istý?</h2>
+      <p class="modal-message" id="confirmMessage">Túto akciu nemožno vrátiť späť.</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('confirmModal')">Zrušiť</button>
+        <button class="btn btn-danger" id="confirmActionBtn">Potvrdiť</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST NOTIFICATIONS ===== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
