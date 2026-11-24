@@ -4,3 +4,5 @@ test.*
 __pycache__/
 .env
 *.db
+*.db*
+backend/upload/*
