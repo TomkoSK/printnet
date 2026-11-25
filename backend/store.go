@@ -101,6 +101,35 @@ func (s *Store) DeviceExists(ctx context.Context, id int64) (bool, error) {
 	return err == nil, err
 }
 
+// DeviceInfo is the public view of a device, safe to show to users.
+type DeviceInfo struct {
+	ID     int64  `json:"id"`
+	Name   string `json:"name"`
+	Online bool   `json:"online"`
+}
+
+// ListDevices returns all devices. A device counts as online if it polled within onlineWindow.
+func (s *Store) ListDevices(ctx context.Context, onlineWindow time.Duration) ([]DeviceInfo, error) {
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT id, name, COALESCE(last_seen >= datetime('now', ?), 0)
+		FROM devices ORDER BY name, id`,
+		"-"+strconv.FormatInt(int64(onlineWindow/time.Second), 10)+" seconds")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	devices := []DeviceInfo{} // empty list encodes as [] instead of null
+	for rows.Next() {
+		var d DeviceInfo
+		if err := rows.Scan(&d.ID, &d.Name, &d.Online); err != nil {
+			return nil, err
+		}
+		devices = append(devices, d)
+	}
+	return devices, rows.Err()
+}
+
 func (s *Store) TouchDevice(ctx context.Context, id int64) error {
 	_, err := s.db.ExecContext(ctx,
 		`UPDATE devices SET last_seen = CURRENT_TIMESTAMP WHERE id = ?`, id)

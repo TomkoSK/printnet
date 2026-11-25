@@ -24,6 +24,7 @@ import (
 const (
 	MaxUpload     = 20 << 20         // 20 MB
 	StaleJobAfter = 10 * time.Minute // a job printing longer than this is marked failed
+	OnlineWindow  = 30 * time.Second // a device that polled within this time is shown as online
 )
 
 type App struct {
@@ -107,6 +108,17 @@ func (a *App) print(w http.ResponseWriter, req *http.Request) {
 	}
 
 	writeJSON(w, http.StatusCreated, map[string]any{"id": id, "status": "queued"})
+}
+
+// devices lists printers users can send jobs to. Tokens are never included.
+func (a *App) devices(w http.ResponseWriter, req *http.Request) {
+	devices, err := a.store.ListDevices(req.Context(), OnlineWindow)
+	if err != nil {
+		log.Println("list devices:", err)
+		http.Error(w, "server error", http.StatusInternalServerError)
+		return
+	}
+	writeJSON(w, http.StatusOK, devices)
 }
 
 func (a *App) jobInfo(w http.ResponseWriter, req *http.Request) {
@@ -294,6 +306,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /print", app.print) // TODO: user auth
 	mux.HandleFunc("GET /jobs/{id}", app.jobInfo)
+	mux.HandleFunc("GET /devices", app.devices)
 	mux.HandleFunc("GET /device/next-job", app.deviceAuth(app.nextJob))
 	mux.HandleFunc("GET /device/jobs/{id}/file", app.deviceAuth(app.jobFile))
 	mux.HandleFunc("POST /device/jobs/{id}/status", app.deviceAuth(app.jobStatus))
